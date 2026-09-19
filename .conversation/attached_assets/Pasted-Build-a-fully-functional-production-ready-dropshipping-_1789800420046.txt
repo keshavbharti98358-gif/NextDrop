@@ -1,0 +1,730 @@
+Build a **fully functional, production-ready dropshipping e-commerce website** from scratch.
+
+The website should look and behave like a modern professional online store, with a responsive design for **desktop, tablet, and mobile**.
+
+## 1. Website Concept
+
+Create a general dropshipping store called **"NEXORA"** selling trending products across categories such as:
+
+* Electronics & Gadgets
+* Home & Kitchen
+* Beauty & Personal Care
+* Fitness
+* Accessories
+* Lifestyle
+* Trending Products
+
+Use realistic placeholder products, product images, descriptions, prices, ratings, reviews, inventory, and categories.
+
+The architecture must be designed so products can easily be replaced with real supplier products later.
+
+---
+
+# 2. Frontend
+
+Create a modern, premium e-commerce UI with:
+
+### Header
+
+* Store logo/name: NEXORA
+* Home
+* Shop
+* Categories
+* Deals
+* About
+* Contact
+* Search icon/bar
+* Account icon
+* Wishlist icon
+* Shopping cart icon
+* Mobile hamburger menu
+
+Header should remain usable while scrolling.
+
+### Homepage
+
+Include:
+
+1. Hero section
+
+   * Large promotional banner
+   * Strong headline
+   * Short description
+   * "Shop Now" CTA
+   * Attractive product imagery
+
+2. Featured Categories
+
+3. Trending Products
+
+4. Best Sellers
+
+5. Flash Sale / Limited-Time Deals
+
+   * Countdown timer
+   * Discount percentages
+   * Original price
+   * Sale price
+
+6. Why Choose Us
+
+   * Secure Payment
+   * Fast Shipping
+   * Easy Returns
+   * Customer Support
+
+7. Customer Reviews
+
+8. Newsletter subscription
+
+9. Footer
+
+---
+
+# 3. Product Listing Page
+
+Create a complete shop page.
+
+Features:
+
+* Product grid
+* Product cards
+* Product image
+* Product name
+* Rating
+* Number of reviews
+* Original price
+* Discounted price
+* Discount percentage
+* Stock status
+* Add to Cart
+* Add to Wishlist
+* Quick View
+
+Filtering:
+
+* Category
+* Price range
+* Rating
+* Availability
+* Discount
+
+Sorting:
+
+* Featured
+* Price: Low → High
+* Price: High → Low
+* Rating
+* Newest
+* Best Selling
+
+Add pagination or infinite scrolling.
+
+---
+
+# 4. Product Details Page
+
+Each product should have:
+
+* Multiple product images
+* Image gallery
+* Product title
+* Rating
+* Reviews
+* Original price
+* Sale price
+* Discount
+* Stock quantity/status
+* Product description
+* Specifications
+* Available variants
+* Quantity selector
+* Add to Cart
+* Buy Now
+* Add to Wishlist
+* Estimated delivery date
+* Shipping information
+* Return policy
+* Customer reviews
+* Related products
+
+The Buy Now button should take the customer directly to checkout.
+
+---
+
+# 5. Shopping Cart
+
+Create a fully functional cart.
+
+Users should be able to:
+
+* Add products
+* Remove products
+* Increase quantity
+* Decrease quantity
+* View subtotal
+* Apply coupon codes
+* Calculate shipping
+* Calculate taxes
+* View total
+* Continue shopping
+* Proceed to checkout
+
+Cart data should persist after page refresh.
+
+---
+
+# 6. Checkout
+
+Create a complete checkout flow.
+
+Customer information:
+
+* Full name
+* Email
+* Phone
+* Address
+* Apartment/Building
+* City
+* State
+* Country
+* ZIP/PIN code
+
+Shipping method:
+
+* Standard Shipping
+* Express Shipping
+
+Payment options:
+
+* Credit/Debit Card
+* UPI
+* Net Banking
+* Cash on Delivery where supported
+
+Create a secure payment architecture using a payment gateway such as **Stripe or Razorpay**.
+
+Do NOT store raw card information.
+
+After successful payment:
+
+* Generate an order
+* Generate unique order ID
+* Show order confirmation
+* Send confirmation email
+* Update inventory
+* Clear cart
+
+For development, provide a test/mock payment mode if live payment credentials are unavailable.
+
+---
+
+# 7. User Authentication
+
+Implement:
+
+* Sign Up
+* Login
+* Logout
+* Forgot Password
+* Password Reset
+* Email verification where appropriate
+
+User profile should contain:
+
+* Name
+* Email
+* Phone
+* Saved addresses
+* Order history
+* Wishlist
+* Account settings
+
+Use secure authentication and password hashing.
+
+---
+
+# 8. Order Management
+
+Customers should be able to view:
+
+* Order ID
+* Date
+* Products
+* Quantity
+* Total amount
+* Payment status
+* Order status
+* Shipping status
+* Tracking number
+
+Order statuses:
+
+* Pending
+* Confirmed
+* Processing
+* Shipped
+* Out for Delivery
+* Delivered
+* Cancelled
+* Refunded
+
+Create an order tracking page.
+
+---
+
+# 9. Admin Dashboard
+
+Create a protected admin dashboard.
+
+Admin should be able to:
+
+### Products
+
+* Add product
+* Edit product
+* Delete product
+* Upload product images
+* Set price
+* Set sale price
+* Set inventory
+* Add variants
+* Assign categories
+* Mark products as featured
+* Mark products as best sellers
+
+### Orders
+
+* View orders
+* Search orders
+* Filter orders
+* Change order status
+* Add tracking number
+* View customer information
+* Process refunds
+
+### Customers
+
+* View customers
+* View customer orders
+* Manage customer accounts
+
+### Coupons
+
+* Create coupons
+* Set percentage discount
+* Set fixed discount
+* Set expiration date
+* Set minimum order value
+* Enable/disable coupon
+
+### Dashboard Analytics
+
+Display:
+
+* Total sales
+* Orders
+* Customers
+* Revenue
+* Average order value
+* Best-selling products
+* Recent orders
+* Sales chart
+
+---
+
+# 10. Dropshipping Architecture
+
+Design the system so it can later integrate with suppliers such as:
+
+* Shopify-compatible suppliers
+* CJdropshipping
+* AliExpress-compatible APIs
+* Printful
+* Printify
+* Other supplier APIs
+
+Create a supplier abstraction layer rather than tightly coupling the application to one supplier.
+
+Product data should support:
+
+* Supplier ID
+* Supplier product ID
+* Supplier cost
+* Selling price
+* Inventory
+* Supplier URL
+* Product variants
+* Shipping information
+
+When an order is paid:
+
+1. Create customer order.
+2. Verify payment.
+3. Reserve/decrease inventory.
+4. Send order information to supplier integration.
+5. Store supplier order ID.
+6. Retrieve/update fulfillment status.
+7. Update customer order status.
+8. Provide tracking information to customer.
+
+If a real supplier API is unavailable, implement a mock supplier service with clearly separated integration code.
+
+---
+
+# 11. Database
+
+Use a proper relational database such as **PostgreSQL**.
+
+Create appropriate tables/models for:
+
+* Users
+* Products
+* Categories
+* Product Images
+* Product Variants
+* Inventory
+* Orders
+* Order Items
+* Payments
+* Addresses
+* Reviews
+* Wishlists
+* Coupons
+* Cart
+* Suppliers
+* Supplier Products
+* Supplier Orders
+* Shipping
+* Notifications
+
+Use relationships and database constraints properly.
+
+Do not use hardcoded product data for the final application.
+
+Provide database migrations and seed data.
+
+---
+
+# 12. Backend
+
+Build a secure REST API or equivalent backend architecture.
+
+Include endpoints for:
+
+* Authentication
+* Products
+* Categories
+* Search
+* Cart
+* Wishlist
+* Checkout
+* Payments
+* Orders
+* Reviews
+* Users
+* Coupons
+* Admin
+* Supplier integration
+
+Implement:
+
+* Input validation
+* Authentication middleware
+* Authorization
+* Error handling
+* Rate limiting where appropriate
+* Secure environment variables
+* Logging
+* Proper HTTP status codes
+
+Never expose secret API keys to the frontend.
+
+---
+
+# 13. Search
+
+Implement product search with:
+
+* Keyword search
+* Category filtering
+* Price filtering
+* Rating filtering
+* Sorting
+
+Search should work across product name, description, and relevant metadata.
+
+---
+
+# 14. Reviews & Ratings
+
+Customers who purchased a product should be able to leave:
+
+* Star rating
+* Review
+* Optional images
+
+Prevent duplicate reviews for the same order/product.
+
+Show:
+
+* Average rating
+* Rating distribution
+* Customer reviews
+
+---
+
+# 15. Wishlist
+
+Users can:
+
+* Add products to wishlist
+* Remove products
+* Move products to cart
+
+Wishlist should persist between sessions for authenticated users.
+
+---
+
+# 16. Email Notifications
+
+Create email notification architecture for:
+
+* Account registration
+* Password reset
+* Order confirmation
+* Payment confirmation
+* Order shipped
+* Order delivered
+* Order cancellation
+* Refund
+
+Use an email service such as Resend, SendGrid, or another transactional email provider.
+
+Use environment variables for API credentials.
+
+---
+
+# 17. SEO
+
+Implement:
+
+* SEO-friendly URLs
+* Product metadata
+* Open Graph metadata
+* Sitemap
+* Robots.txt
+* Canonical URLs
+* Structured product data/schema markup
+* Proper heading hierarchy
+* Image alt text
+
+Example:
+
+`/product/wireless-portable-blender`
+
+instead of:
+
+`/product?id=123`
+
+---
+
+# 18. Performance
+
+Optimize the website for speed.
+
+Implement:
+
+* Image optimization
+* Lazy loading
+* Code splitting where appropriate
+* Caching
+* Efficient database queries
+* Pagination
+* Responsive images
+* Loading states
+* Skeleton loaders
+
+Aim for excellent Core Web Vitals.
+
+---
+
+# 19. Security
+
+Implement production-grade security:
+
+* HTTPS-ready configuration
+* Secure authentication
+* Password hashing
+* JWT/session security
+* CSRF protection where applicable
+* XSS protection
+* SQL injection protection
+* Input sanitization
+* Rate limiting
+* Secure cookies
+* Environment variables
+* Admin route protection
+
+Never expose:
+
+* Database credentials
+* Payment secret keys
+* Supplier API keys
+* Email API keys
+
+to the client.
+
+---
+
+# 20. Responsive Design
+
+The website must work properly on:
+
+* 320px mobile
+* 375px mobile
+* 768px tablet
+* 1024px tablet/laptop
+* 1440px desktop
+* Large desktop screens
+
+Do not simply shrink the desktop layout.
+
+Create proper mobile navigation and mobile-friendly checkout.
+
+---
+
+# 21. UI/UX
+
+Use a modern premium e-commerce aesthetic.
+
+Design principles:
+
+* Clean typography
+* Strong visual hierarchy
+* Consistent spacing
+* High-quality product cards
+* Smooth hover effects
+* Subtle animations
+* Clear CTAs
+* Accessible color contrast
+* Loading states
+* Empty states
+* Error states
+* Success notifications
+
+Avoid excessive animations.
+
+The website should feel like a real commercial e-commerce platform rather than a student demo.
+
+---
+
+# 22. Legal Pages
+
+Create:
+
+* Privacy Policy
+* Terms & Conditions
+* Shipping Policy
+* Return & Refund Policy
+* Cookie Policy
+* Contact page
+
+Use clearly marked placeholder business information where actual legal/business details are unavailable.
+
+Do not fabricate real company registration numbers, addresses, certifications, or legal claims.
+
+---
+
+# 23. Deployment
+
+Prepare the application for production deployment.
+
+Include:
+
+* Environment variable configuration
+* Production build configuration
+* Database migration instructions
+* Seed script
+* README
+* API documentation
+* Deployment instructions
+
+The application should be deployable using services such as:
+
+Frontend:
+
+* Vercel / Netlify
+
+Backend:
+
+* Render / Railway / Fly.io
+
+Database:
+
+* PostgreSQL / Supabase / Neon
+
+---
+
+# 24. Code Quality
+
+Use:
+
+* Clean architecture
+* Reusable components
+* Modular code
+* Type safety where applicable
+* Meaningful variable names
+* Proper error handling
+* Comments only where useful
+* No unnecessary duplicate code
+
+Do not create fake buttons or non-functional UI.
+
+Every major button and feature must actually work.
+
+Do not leave TODO placeholders for core functionality.
+
+---
+
+# 25. Required Deliverable
+
+Generate the COMPLETE application.
+
+I want:
+
+1. Fully working frontend
+2. Fully working backend
+3. Database schema
+4. Database migrations
+5. Seed data
+6. Authentication
+7. Product management
+8. Cart
+9. Wishlist
+10. Checkout
+11. Payment integration architecture
+12. Order management
+13. Admin dashboard
+14. Supplier/dropshipping integration architecture
+15. Search/filtering
+16. Reviews
+17. Email notification architecture
+18. SEO
+19. Responsive UI
+20. Security
+21. Legal pages
+22. Deployment configuration
+23. README with setup instructions
+
+Before finishing, test the major user flows:
+
+**Visitor → Browse → Product → Cart → Checkout → Payment → Order Confirmation**
+
+and
+
+**Admin → Login → Dashboard → Add Product → Manage Inventory → View Order → Update Order Status**
+
+Fix any errors you encounter.
+
+Most importantly: **do not build only a frontend mockup. Build a genuinely functional full-stack e-commerce application with a real database and backend APIs.**

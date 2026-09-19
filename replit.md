@@ -1,6 +1,6 @@
-# [Project name]
+# NEXORA Store
 
-_Replace the heading above with the project's name, and this line with one sentence describing what this app does for users._
+NEXORA is a curated dropshipping storefront for useful, design-forward products, with a persistent cart, checkout, order tracking, Clerk accounts, and an admin summary view.
 
 ## Run & Operate
 
@@ -9,6 +9,7 @@ _Replace the heading above with the project's name, and this line with one sente
 - `pnpm run build` — typecheck + build all packages
 - `pnpm --filter @workspace/api-spec run codegen` — regenerate API hooks and Zod schemas from the OpenAPI spec
 - `pnpm --filter @workspace/db run push` — push DB schema changes (dev only)
+- `pnpm --filter @workspace/scripts run seed:nexora` — seed a starter catalog
 - Required env: `DATABASE_URL` — Postgres connection string
 
 ## Stack
@@ -22,23 +23,32 @@ _Replace the heading above with the project's name, and this line with one sente
 
 ## Where things live
 
-_Populate as you build — short repo map plus pointers to the source-of-truth file for DB schema, API contracts, theme files, etc._
+- `artifacts/nexora-store` — React/Vite storefront, routes, theme, and Clerk UI
+- `artifacts/api-server` — Express API routes and supplier/cart/checkout logic
+- `lib/api-spec/openapi.yaml` — source of truth for generated API clients and Zod schemas
+- `lib/db/src/schema/store.ts` — PostgreSQL/Drizzle catalog, carts, orders, and order items
+- `scripts/src/seed-nexora.ts` — idempotent starter seed
 
 ## Architecture decisions
 
-_Populate as you build — non-obvious choices a reader couldn't infer from the code (3-5 bullets)._
+- Product data comes from PostgreSQL; the storefront never relies on hardcoded product arrays.
+- Checkout uses a mock payment mode by design until a payment provider is connected; raw card data is never accepted or stored.
+- Cart persistence uses a secure, httpOnly session cookie so anonymous shoppers keep their bag after refresh.
+- `supplierId`, `supplierProductId`, and `supplierCost` live on products so a supplier adapter can be added without changing storefront contracts.
+- Clerk owns authentication and browser session cookies; server middleware remains the authorization boundary.
 
 ## Product
 
-_Describe the high-level user-facing capabilities of this app once they exist._
+Visitors can browse and filter the catalog, view product details, add items to a persistent bag, apply `NEXORA10`, complete a mock-payment checkout, and track an order. Signed-in users have an account entry point, and authenticated users can access the admin summary route.
 
 ## User preferences
 
-_Populate as you build — explicit user instructions worth remembering across sessions._
+- Keep NEXORA editorial, functional, and responsive rather than marketplace-generic.
 
 ## Gotchas
 
-_Populate as you build — sharp edges, "always run X before Y" rules._
+- Run API codegen after changing `lib/api-spec/openapi.yaml`.
+- The API server expects `DATABASE_URL`; the managed Clerk development-key warning in the browser is expected.
 
 ## Pointers
 

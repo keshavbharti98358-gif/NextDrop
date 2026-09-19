@@ -3,20 +3,23 @@ info:
   # Do not change the title, if the title changes, the import paths will be broken
   title: Api
   version: 0.1.0
-  description: API specification
+  description: NEXORA commerce API
 servers:
   - url: /api
     description: Base API path
 tags:
   - name: health
-    description: Health operations
+  - name: storefront
+  - name: cart
+  - name: checkout
+  - name: orders
+  - name: admin
 paths:
   /healthz:
     get:
       operationId: healthCheck
       tags: [health]
       summary: Health check
-      description: Returns server health status
       responses:
         "200":
           description: Healthy
@@ -24,13 +27,450 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/HealthStatus"
+  /categories:
+    get:
+      operationId: listCategories
+      tags: [storefront]
+      summary: List storefront categories
+      responses:
+        "200":
+          description: Categories
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Category"
+  /products:
+    get:
+      operationId: listProducts
+      tags: [storefront]
+      summary: Search and filter products
+      parameters:
+        - $ref: "#/components/parameters/Search"
+        - name: category
+          in: query
+          schema: { type: string }
+        - name: featured
+          in: query
+          schema: { type: boolean }
+        - name: bestSeller
+          in: query
+          schema: { type: boolean }
+        - name: deal
+          in: query
+          schema: { type: boolean }
+        - name: minPrice
+          in: query
+          schema: { type: number, minimum: 0 }
+        - name: maxPrice
+          in: query
+          schema: { type: number, minimum: 0 }
+        - name: minRating
+          in: query
+          schema: { type: number, minimum: 0, maximum: 5 }
+        - name: sort
+          in: query
+          schema:
+            type: string
+            enum: [featured, price_asc, price_desc, rating, newest, bestselling]
+            default: featured
+        - name: page
+          in: query
+          schema: { type: integer, minimum: 1, default: 1 }
+        - name: pageSize
+          in: query
+          schema: { type: integer, minimum: 1, maximum: 48, default: 12 }
+      responses:
+        "200":
+          description: Product results
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ProductList"
+  /products/{slug}:
+    get:
+      operationId: getProduct
+      tags: [storefront]
+      summary: Get a product by slug
+      parameters:
+        - name: slug
+          in: path
+          required: true
+          schema: { type: string }
+      responses:
+        "200":
+          description: Product detail
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Product"
+        "404":
+          $ref: "#/components/responses/NotFound"
+  /storefront/home:
+    get:
+      operationId: getHome
+      tags: [storefront]
+      summary: Get homepage merchandising data
+      responses:
+        "200":
+          description: Homepage content
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/HomePayload"
+  /cart:
+    get:
+      operationId: getCart
+      tags: [cart]
+      summary: Get the current cart
+      responses:
+        "200":
+          description: Cart
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Cart"
+  /cart/items:
+    post:
+      operationId: addCartItem
+      tags: [cart]
+      summary: Add a product to the current cart
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/CartItemInput"
+      responses:
+        "200":
+          description: Updated cart
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Cart"
+  /cart/items/{productId}:
+    patch:
+      operationId: updateCartItem
+      tags: [cart]
+      summary: Change cart item quantity
+      parameters:
+        - name: productId
+          in: path
+          required: true
+          schema: { type: string }
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/CartQuantityInput"
+      responses:
+        "200":
+          description: Updated cart
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Cart"
+    delete:
+      operationId: removeCartItem
+      tags: [cart]
+      summary: Remove a product from the current cart
+      parameters:
+        - name: productId
+          in: path
+          required: true
+          schema: { type: string }
+      responses:
+        "200":
+          description: Updated cart
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Cart"
+  /checkout/quote:
+    post:
+      operationId: getCheckoutQuote
+      tags: [checkout]
+      summary: Calculate checkout totals
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/CheckoutQuoteInput"
+      responses:
+        "200":
+          description: Checkout quote
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/CheckoutQuote"
+  /checkout/orders:
+    post:
+      operationId: createOrder
+      tags: [checkout]
+      summary: Create an order with mock payment
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/CheckoutInput"
+      responses:
+        "201":
+          description: Created order
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Order"
+  /orders/{orderId}:
+    get:
+      operationId: getOrder
+      tags: [orders]
+      summary: Get order tracking details
+      parameters:
+        - name: orderId
+          in: path
+          required: true
+          schema: { type: string }
+      responses:
+        "200":
+          description: Order
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Order"
+        "404":
+          $ref: "#/components/responses/NotFound"
+  /admin/summary:
+    get:
+      operationId: getAdminSummary
+      tags: [admin]
+      summary: Get admin dashboard summary
+      responses:
+        "200":
+          description: Dashboard summary
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/AdminSummary"
 components:
+  parameters:
+    Search:
+      name: search
+      in: query
+      schema: { type: string }
+  responses:
+    NotFound:
+      description: Not found
+      content:
+        application/json:
+          schema:
+            $ref: "#/components/schemas/Error"
   schemas:
     HealthStatus:
       type: object
       properties:
+        status: { type: string }
+      required: [status]
+    Error:
+      type: object
+      properties:
+        error: { type: string }
+      required: [error]
+    Category:
+      type: object
+      properties:
+        id: { type: string }
+        name: { type: string }
+        slug: { type: string }
+        description: { type: string }
+        image: { type: string }
+        productCount: { type: integer }
+      required: [id, name, slug, description, image, productCount]
+    Product:
+      type: object
+      properties:
+        id: { type: string }
+        slug: { type: string }
+        name: { type: string }
+        description: { type: string }
+        category: { type: string }
+        categorySlug: { type: string }
+        images:
+          type: array
+          items: { type: string }
+        price: { type: number }
+        originalPrice: { type: number }
+        discountPercent: { type: integer }
+        rating: { type: number }
+        reviewCount: { type: integer }
+        stock: { type: integer }
+        featured: { type: boolean }
+        bestSeller: { type: boolean }
+        deal: { type: boolean }
+        badge: { type: ["string", "null"] }
+        colors:
+          type: array
+          items: { type: string }
+        sizes:
+          type: array
+          items: { type: string }
+        specifications:
+          type: array
+          items:
+            $ref: "#/components/schemas/Specification"
+        shipping: { type: string }
+        returnPolicy: { type: string }
+      required: [id, slug, name, description, category, categorySlug, images, price, originalPrice, discountPercent, rating, reviewCount, stock, featured, bestSeller, deal, badge, colors, sizes, specifications, shipping, returnPolicy]
+    Specification:
+      type: object
+      properties:
+        label: { type: string }
+        value: { type: string }
+      required: [label, value]
+    ProductList:
+      type: object
+      properties:
+        items:
+          type: array
+          items: { $ref: "#/components/schemas/Product" }
+        total: { type: integer }
+        page: { type: integer }
+        pageSize: { type: integer }
+        totalPages: { type: integer }
+      required: [items, total, page, pageSize, totalPages]
+    HomePayload:
+      type: object
+      properties:
+        featuredCategories:
+          type: array
+          items: { $ref: "#/components/schemas/Category" }
+        trendingProducts:
+          type: array
+          items: { $ref: "#/components/schemas/Product" }
+        bestSellers:
+          type: array
+          items: { $ref: "#/components/schemas/Product" }
+        deals:
+          type: array
+          items: { $ref: "#/components/schemas/Product" }
+        dealEndsAt: { type: string, format: date-time }
+      required: [featuredCategories, trendingProducts, bestSellers, deals, dealEndsAt]
+    CartItem:
+      type: object
+      properties:
+        product: { $ref: "#/components/schemas/Product" }
+        quantity: { type: integer, minimum: 1 }
+        lineTotal: { type: number }
+      required: [product, quantity, lineTotal]
+    Cart:
+      type: object
+      properties:
+        items:
+          type: array
+          items: { $ref: "#/components/schemas/CartItem" }
+        subtotal: { type: number }
+        shipping: { type: number }
+        tax: { type: number }
+        total: { type: number }
+        itemCount: { type: integer }
+      required: [items, subtotal, shipping, tax, total, itemCount]
+    CartItemInput:
+      type: object
+      properties:
+        productId: { type: string }
+        quantity: { type: integer, minimum: 1, maximum: 20 }
+      required: [productId, quantity]
+    CartQuantityInput:
+      type: object
+      properties:
+        quantity: { type: integer, minimum: 0, maximum: 20 }
+      required: [quantity]
+    CheckoutQuoteInput:
+      type: object
+      properties:
+        shippingMethod:
+          type: string
+          enum: [standard, express]
+        coupon: { type: ["string", "null"] }
+      required: [shippingMethod]
+    CheckoutQuote:
+      type: object
+      properties:
+        subtotal: { type: number }
+        shipping: { type: number }
+        discount: { type: number }
+        tax: { type: number }
+        total: { type: number }
+        couponApplied: { type: ["string", "null"] }
+      required: [subtotal, shipping, discount, tax, total, couponApplied]
+    CheckoutInput:
+      type: object
+      properties:
+        fullName: { type: string, minLength: 2 }
+        email: { type: string, format: email }
+        phone: { type: string, minLength: 5 }
+        address: { type: string, minLength: 3 }
+        apartment: { type: ["string", "null"] }
+        city: { type: string, minLength: 2 }
+        state: { type: string, minLength: 2 }
+        country: { type: string, minLength: 2 }
+        postalCode: { type: string, minLength: 3 }
+        shippingMethod:
+          type: string
+          enum: [standard, express]
+        paymentMethod:
+          type: string
+          enum: [card, upi, netbanking, cod]
+        coupon: { type: ["string", "null"] }
+      required: [fullName, email, phone, address, city, state, country, postalCode, shippingMethod, paymentMethod]
+    OrderItem:
+      type: object
+      properties:
+        product: { $ref: "#/components/schemas/Product" }
+        quantity: { type: integer }
+        lineTotal: { type: number }
+      required: [product, quantity, lineTotal]
+    Order:
+      type: object
+      properties:
+        id: { type: string }
+        date: { type: string, format: date-time }
         status:
           type: string
-      required:
-        - status
-
+          enum: [pending, confirmed, processing, shipped, delivered, cancelled, refunded]
+        shippingStatus: { type: string }
+        trackingNumber: { type: ["string", "null"] }
+        items:
+          type: array
+          items: { $ref: "#/components/schemas/OrderItem" }
+        total: { type: number }
+        customerName: { type: string }
+        customerEmail: { type: string }
+        paymentStatus: { type: string }
+        shippingAddress: { type: string }
+        estimatedDelivery: { type: string }
+      required: [id, date, status, shippingStatus, trackingNumber, items, total, customerName, customerEmail, paymentStatus, shippingAddress, estimatedDelivery]
+    AdminSummary:
+      type: object
+      properties:
+        totalSales: { type: number }
+        orders: { type: integer }
+        customers: { type: integer }
+        revenue: { type: number }
+        averageOrderValue: { type: number }
+        bestSellingProducts:
+          type: array
+          items:
+            type: object
+            properties:
+              name: { type: string }
+              units: { type: integer }
+              revenue: { type: number }
+            required: [name, units, revenue]
+        recentOrders:
+          type: array
+          items: { $ref: "#/components/schemas/Order" }
+      required: [totalSales, orders, customers, revenue, averageOrderValue, bestSellingProducts, recentOrders]

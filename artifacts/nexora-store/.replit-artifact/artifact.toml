@@ -1,0 +1,28 @@
+kind = "web"
+previewPath = "/"
+title = "NEXORA Store"
+description = "A premium dropshipping storefront for discovering trending products across gadgets, home, beauty, fitness, accessories, and lifestyle categories, with shopping, cart, checkout, and account experiences."
+version = "1.0.0"
+id = "artifacts/nexora-store"
+router = "path"
+
+[[services]]
+name = "web"
+paths = [ "/" ]
+localPort = 18236
+
+[services.development]
+run = "pnpm --filter @workspace/nexora-store run dev"
+
+[services.production]
+build = [ "pnpm", "--filter", "@workspace/nexora-store", "run", "build" ]
+serve = "static"
+publicDir = "artifacts/nexora-store/dist/public"
+
+[[services.production.rewrites]]
+from = "/*"
+to = "/index.html"
+
+[services.env]
+PORT = "18236"
+BASE_PATH = "/"
