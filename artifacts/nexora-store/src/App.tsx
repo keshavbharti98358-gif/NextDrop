@@ -136,7 +136,7 @@ function ClerkRoutes() {
       signInUrl={`${basePath}/sign-in`}
       signUpUrl={`${basePath}/sign-up`}
       localization={{
-        signIn: { start: { title: "Welcome back", subtitle: "Sign in to access your NEXORA account" } },
+        signIn: { start: { title: "Welcome back", subtitle: "Sign in to access your NextDrop account" } },
         signUp: { start: { title: "Create your account", subtitle: "Save your finds and track every order" } },
       }}
       routerPush={(to) => setLocation(stripBase(to))}

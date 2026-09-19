@@ -26,7 +26,7 @@ export function Shell({ children }: { children: ReactNode }) {
         <div className="mx-auto flex h-[74px] max-w-[1400px] items-center justify-between px-5 lg:px-10">
           <Link href="/" className="flex items-center gap-3" data-testid="link-logo">
             <span className="flex h-9 w-9 items-center justify-center bg-primary font-display text-xl font-bold">N</span>
-            <span className="font-display text-xl font-bold tracking-[-0.06em]">NEXORA</span>
+            <span className="font-display text-xl font-bold tracking-[-0.06em]">NextDrop</span>
           </Link>
           <nav className="hidden items-center gap-8 md:flex">
             {nav.map((item) => (
@@ -72,7 +72,7 @@ function Footer() {
         <div>
           <Link href="/" className="flex items-center gap-3" data-testid="link-footer-logo">
             <span className="flex h-9 w-9 items-center justify-center bg-primary font-display text-xl font-bold text-foreground">N</span>
-            <span className="font-display text-xl font-bold tracking-[-0.06em]">NEXORA</span>
+            <span className="font-display text-xl font-bold tracking-[-0.06em]">NextDrop</span>
           </Link>
           <p className="mt-5 max-w-xs text-sm leading-6 text-background/60">Useful things, found with a sharper eye. A small edit of products for the way you live now.</p>
         </div>
@@ -80,7 +80,7 @@ function Footer() {
         <div><p className="font-mono-ui text-[10px] text-background/45">Help</p><div className="mt-4 flex flex-col gap-3 text-sm text-background/75"><Link href="/shipping" data-testid="link-footer-shipping">Shipping</Link><Link href="/returns" data-testid="link-footer-returns">Returns</Link><Link href="/contact" data-testid="link-footer-contact">Contact</Link></div></div>
         <div><p className="font-mono-ui text-[10px] text-background/45">Fine print</p><div className="mt-4 flex flex-col gap-3 text-sm text-background/75"><Link href="/privacy" data-testid="link-footer-privacy">Privacy</Link><Link href="/terms" data-testid="link-footer-terms">Terms</Link><Link href="/cookies" data-testid="link-footer-cookies">Cookies</Link></div></div>
       </div>
-      <div className="mx-auto mt-14 flex max-w-[1400px] flex-col justify-between gap-3 border-t border-background/15 pt-5 text-[10px] uppercase tracking-[0.18em] text-background/40 sm:flex-row"><span>© 2025 Nexora Supply Co.</span><span>Good finds, no noise.</span></div>
+      <div className="mx-auto mt-14 flex max-w-[1400px] flex-col justify-between gap-3 border-t border-background/15 pt-5 text-[10px] uppercase tracking-[0.18em] text-background/40 sm:flex-row"><span>© 2025 NextDrop Supply Co.</span><span>Good finds, no noise.</span></div>
     </footer>
   );
 }
